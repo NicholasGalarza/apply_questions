@@ -18,6 +18,7 @@ function decodeString(s) {
   return decodeStringHelper(s, 1);
 };
 
+/* ----------------------- helpers ----------------------- */
 function decodeStringHelper(strArr, duplicate) {
   let decodedString = "";
   let bracketCounter = 0;
@@ -31,17 +32,17 @@ function decodeStringHelper(strArr, duplicate) {
     if (/[a-zA-Z]/.test(element) && container.length === 0) decodedString += element;
 
     if (bracketCounter === 0 && container.includes('[', ']')) {
-      const duplicateCount = extractDuplicateCounter(container)
+      const duplicateCount = extractDuplicateCounter(container);
       container = extractBetweenBrackets(container, duplicateCount.length);
       decodedString += decodeStringHelper(container, duplicateCount);
       container = []; // reset upon exit
     }
   }
 
-  return decodedString.repeat(duplicate)
+  return decodedString.repeat(duplicate);
 }
 
-function isNumber(element) { return !isNaN(element) }
+function isNumber(element) { return !isNaN(element); }
 
 function extractDuplicateCounter(container) {
   let string = "";
@@ -50,23 +51,23 @@ function extractDuplicateCounter(container) {
     else break;
   }
   return string.length ? string : '1';
-}
+};
 
 function extractBetweenBrackets(container, start) {
-  const idx = isNumber(container[0]) ? (start + 1) : 1
-  return container.slice(idx, container.length - 1)
-}
+  const idx = isNumber(container[0]) ? (start + 1) : 1;
+  return container.slice(idx, container.length - 1);
+};
 
+/* -----------------------  tests  ----------------------- */
 // basic test
-console.log("test1:", decodeString("4[ab]")) // "abababab"
+console.log("test1:", decodeString("4[ab]"))     // "abababab"
 // test for nested brackets
-console.log("test2:", decodeString("2[b3[a]]")) // "baaabaaa"
+console.log("test2:", decodeString("2[b3[a]]"))  // "baaabaaa"
 // test for characters outside of brackets
-console.log("test3:", decodeString("ab2[a]f")) // "abaaf"
+console.log("test3:", decodeString("ab2[a]f"))   // "abaaf"
 // test for numbers larger than a single digit
-console.log("test4:", decodeString("10[ha]")) // "hahahahahahahahahaha"
+console.log("test4:", decodeString("10[ha]"))    // "hahahahahahahahahaha"
 // extra characters get excluded
 console.log("test5:", decodeString("3[hello_world]")) // "helloworldhelloworldhelloworld"
 // sanity checks
-console.log("test6:", decodeString("1000[ha]")) // "lots of {ha}'s in the terminal ..."
-console.log("test7:", decodeString(""))
+console.log("test6:", decodeString("1000[ha]"))  // "lots of {ha}'s in the terminal ..."
